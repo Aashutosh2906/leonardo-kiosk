@@ -1,4 +1,4 @@
-name: Deploy to Vercel
+name: Build Check
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -26,19 +26,3 @@ jobs:
 
       - name: Build project
         run: npm run build
-        env:
-          VITE_APP_ENV: production
-
-      - name: Deploy to Vercel (Production)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: Deploy to Vercel (Preview)
-        if: github.event_name == 'pull_request'
-        run: npx vercel --token=${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
